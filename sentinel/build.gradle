@@ -1,0 +1,93 @@
+buildscript {
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+
+    }
+}
+
+plugins {
+    id "de.undercouch.download" version "3.4.3"
+}
+
+group = 'com.eqshen'
+version = '0.0.1-SNAPSHOT'
+
+
+
+
+dependencies {
+    implementation ("org.springframework.boot:spring-boot-starter:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+
+    // Log4j2
+    implementation("org.springframework.boot:spring-boot-starter-log4j2:$springBootVersion")
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+
+    implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.2'
+
+    // 用于和dashboard通信
+    implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: '1.8.2'
+
+    implementation(group: 'cn.hutool', name: 'hutool-all', version: '5.7.14')
+
+}
+
+task startSentinelDashboard(){
+    def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/1.8.2/sentinel-dashboard-1.8.2.jar"
+    def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
+    //sentinel dashboard server port
+    def dashPort = 8090
+
+    doFirst {
+        downloadFile(jarUrl,targetPath)
+    }
+
+    //执行jar包并启动服务
+    doLast {
+//        new Thread(new Runnable() {
+//            @Override
+//            void run() {
+//
+//            }
+//        }).start()
+
+        javaexec {
+            main="-jar"
+            jvmArgs = [
+                    "-Dserver.port=$dashPort",
+                    "-Dcsp.sentinel.dashboard.server=localhost:$dashPort",
+                    "-Dproject.name=sentinel-dashboard"
+            ]
+            args = [
+                    targetPath
+            ]
+        }
+        println ">>>>>>>> Sentinel dashboard 启动完毕，端口$dashPort，账密：sentinel"
+    }
+
+
+
+
+
+}
+
+def downloadFile(String url,String destPath){
+    if(new File(destPath).exists()){
+        println ">>> file already exist: $destPath"
+        return
+    }
+
+    download {
+        src url
+        dest destPath
+    }
+    println ">>> success to download: $destPath"
+}

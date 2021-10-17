@@ -1,0 +1,3 @@
+rootProject.name = 'frame-learning'
+
+include 'sentinel'
