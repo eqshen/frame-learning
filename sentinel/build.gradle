@@ -16,7 +16,9 @@ plugins {
 group = 'com.eqshen'
 version = '0.0.1-SNAPSHOT'
 
-
+ext{
+    sentinelVersion = '1.8.2'
+}
 
 
 dependencies {
@@ -31,17 +33,17 @@ dependencies {
 
     testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 
-    implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: '1.8.2'
+    implementation group: 'com.alibaba.csp', name: 'sentinel-core', version: sentinelVersion
+    implementation group: 'com.alibaba.csp', name: 'sentinel-annotation-aspectj', version: sentinelVersion
 
     // 用于和dashboard通信
-    implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: '1.8.2'
+    implementation group: 'com.alibaba.csp', name: 'sentinel-transport-simple-http', version: sentinelVersion
 
-    implementation(group: 'cn.hutool', name: 'hutool-all', version: '5.7.14')
 
 }
 
 task startSentinelDashboard(){
-    def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/1.8.2/sentinel-dashboard-1.8.2.jar"
+    def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/$sentinelVersion/sentinel-dashboard-$sentinelVersion\\.jar"
     def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
     //sentinel dashboard server port
     def dashPort = 8090
