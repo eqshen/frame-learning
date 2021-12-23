@@ -48,7 +48,8 @@ task startSentinelDashboard(){
     //sentinel dashboard server port
     def dashPort = 8090
 
-    println targetPath
+    println "保存地址: " + targetPath
+    println "下载地址: " + jarUrl
     doFirst {
         downloadFile(jarUrl,targetPath)
     }
@@ -83,7 +84,7 @@ task startSentinelDashboard(){
 }
 
 def downloadFile(String url,String destPath){
-    println "保存地址: " + destPath
+
     if(new File(destPath).exists()){
         println ">>> file already exist: $destPath"
         return
