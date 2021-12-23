@@ -43,11 +43,12 @@ dependencies {
 }
 
 task startSentinelDashboard(){
-    def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/$sentinelVersion/sentinel-dashboard-$sentinelVersion\\.jar"
+    def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/$sentinelVersion/sentinel-dashboard-$sentinelVersion" + ".jar"
     def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
     //sentinel dashboard server port
     def dashPort = 8090
 
+    println targetPath
     doFirst {
         downloadFile(jarUrl,targetPath)
     }
@@ -82,6 +83,7 @@ task startSentinelDashboard(){
 }
 
 def downloadFile(String url,String destPath){
+    println "保存地址: " + destPath
     if(new File(destPath).exists()){
         println ">>> file already exist: $destPath"
         return
