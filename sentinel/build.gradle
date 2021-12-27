@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins {
-    id "de.undercouch.download" version "3.4.3"
+    id "de.undercouch.download" version "4.1.2"
 }
 
 group = 'com.eqshen'
@@ -42,9 +42,18 @@ dependencies {
 
 }
 
+def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
+
+task cleanSentinelJar(){
+    doLast {
+        delete(targetPath)
+        println "删除：" + targetPath
+    }
+}
+
 task startSentinelDashboard(){
     def jarUrl = "https://github.com/alibaba/Sentinel/releases/download/$sentinelVersion/sentinel-dashboard-$sentinelVersion" + ".jar"
-    def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
+//    def targetPath = "$projectDir/outterJar/sentinel-dashboard.jar"
     //sentinel dashboard server port
     def dashPort = 8090
 
@@ -93,6 +102,7 @@ def downloadFile(String url,String destPath){
     download {
         src url
         dest destPath
+        overwrite false
     }
     println ">>> success to download: $destPath"
 }
